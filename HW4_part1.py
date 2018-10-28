@@ -59,65 +59,63 @@ def lookup(name):
     else:
         print('error: name not found')
 
-#helper functions
-def isNumeric(*args):
-    """Return true if all args are numeric."""
+
+#Arithmetic and comparison operators
+def binaryOpBase(operator):
+    """Pop opstack twice and push result of binary lambda operator."""
+    if len(opstack) >= 2:
+        if isNumeric(opstack[-2:]):
+            op2, op1 = opPopn(2)
+            opPush(operator(op1, op2))
+        else:
+            print('error: arguments must be numeric')
+    else:
+        print('error: not enough arguments on opstack')
+
+def unaryOpBase(operator):
+    """Pop opstack and push result of unary lambd operator."""
+    if len(opstack) >= 1:
+        if isNumeric([opstack[-1]]):
+            opPush(operator(opPop()))
+        else: print('error: argument must be numeric')
+    else: print('error: not enough arguments on opstack')
+
+def isNumeric(args):
+    """Return true if all values in args are numeric."""
     for x in args:
         if not isinstance(x, Number):
             return False
     else:
         return True
 
-def opSize():
-    """Return number of values in opstack."""
-    return len(opstack)
-
-def dictSize():
-    """Return number of dicitonaries in dictstack."""
-    return len(dictstack)
-
-#Arithmetic and comparison operators
 def add():
-    """Pop opstack twice and push sum onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 + op2)
+    """Pop opstack twice and push sum."""
+    binaryOpBase(lambda x,y:x+y)
 
 def sub():
-    """Pop opstack twice and push op1 - op2 onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 - op2)
+    """Pop opstack twice and push difference."""
+    binaryOpBase(lambda x,y:x-y)
 
 def mul():
-    """Pop opstack twice and push product onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 * op2)
-
-def div():
-    """Pop opstack twice and push op1 / op2 onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 / op2)
+    """Pop opstack twice and push product."""
+    binaryOpBase(lambda x,y:x*y)
 
 def mod():
-    """Pop opstack twice and push op1 % op2 ont opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 % op2)
+    """Pop opstack twice and push remainder."""
+    binaryOpBase(lambda x,y:x%y)
+
+def lt():
+    """Pop opstack twice and push result of op1<op2."""
+    binaryOpBase(lambda x,y:x<y)
+
+def gt():
+    """Pop opstack twice and push result of op1>op2."""
+    binaryOpBase(lambda x,y:x>y)
+
+def eq():
+    """Pop opstack twice and push result of op1==op2."""
+    binaryOpBase(lambda x,y:x==y)
 
 def neg():
     """Pop opstack and push negation onto opstack."""
-    op1 = opPop()
-    opPush(-op1)
-
-def lt():
-    """Pop opstack twice and push result of op1<op2 onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 < op2)
-
-def gt():
-    """Pop opstack twice and push result of op1>op2 onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 > op2)
-
-def eq():
-    """Pop opstack twice and push result of op1==op2 onto opstack."""
-    op2, op1 = opPopn(2)
-    opPush(op1 == op2)
+    unaryOpBase(lambda x:-x)
