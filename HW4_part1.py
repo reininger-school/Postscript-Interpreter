@@ -60,8 +60,8 @@ def lookup(name):
         print('error: name not found')
 
 def begin():
-	if len(opstack) > 0 and isinstance(opstack[-1], dict):
-		dictPush(opPop())
+    if len(opstack) > 0 and isinstance(opstack[-1], dict):
+        dictPush(opPop())
 
 
 #Arithmetic and comparison operators
@@ -69,7 +69,7 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
     """Base function for operand functions.
 
        Pop nops items off opstack, and push the result of operator. typeCheck
-	   is an optional boolean func to check the popped arguments."""
+       is an optional boolean func to check the popped arguments."""
     if len(opstack) >= nops:
         if typeCheck(opstack[-nops:]):
             ops = opPopn(nops)
@@ -89,48 +89,46 @@ def isNumeric(args):
 
 def add():
     """Pop opstack twice and push sum."""
-    binaryOpBase(lambda x,y:x+y, isNumeric)
+    opBase(lambda x:x[0]+x[1], isNumeric)
 
 def sub():
     """Pop opstack twice and push difference."""
-    binaryOpBase(lambda x,y:x-y, isNumeric)
+    opBase(lambda x:x[0]-x[1], isNumeric)
 
 def mul():
     """Pop opstack twice and push product."""
-    binaryOpBase(lambda x,y:x*y, isNumeric)
+    opBase(lambda x:x[0]*x[1], isNumeric)
 
 def mod():
     """Pop opstack twice and push remainder."""
-    binaryOpBase(lambda x,y:x%y, isNumeric)
+    opBase(lambda x:x[0]%x[1], isNumeric)
 
 def lt():
     """Pop opstack twice and push result of op1<op2."""
-    binaryOpBase(lambda x,y:x<y, isNumeric)
+    opBase(lambda x:x[0]<x[1], isNumeric)
 
 def gt():
     """Pop opstack twice and push result of op1>op2."""
-    binaryOpBase(lambda x,y:x>y, isNumeric)
+    opBase(lambda x:x[0]>x[1], isNumeric)
 
 def eq():
     """Pop opstack twice and push result of op1==op2."""
-    binaryOpBase(lambda x,y:x==y, isNumeric)
+    opBase(lambda x:x[0]==x[1], isNumeric)
 
 def neg():
     """Pop opstack and push negation onto opstack."""
     opBase(lambda x:-x[0], isNumeric, 1)
 
-#array operators
-
-
 #boolean operators
 def psAnd():
-	"""Pop opstack twice and push result of op1 AND op2."""
-    binaryOpBase(lambda x,y:x and y)
+    """Pop opstack twice and push result of op1 AND op2."""
+    opBase(lambda x:x[0] and x[1])
 
 def psOr():
-	"""Pop opstack twice and push result of op1 OR op2."""
-    binaryOpBase(lambda x,y:x or y)
+    """Pop opstack twice and push result of op1 OR op2."""
+    opBase(lambda x:x[0] or x[1])
 
 def psNot():
-	"""Pop opstack and push result of NOT."""
+    """Pop opstack and push result of NOT."""
     opBase(lambda x:not x[0], nops=1)
+
