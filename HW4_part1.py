@@ -1,6 +1,6 @@
 #programmer: Reid Reininger(charles.reininger@wsu.edu)
 #date: 10/24/18
-#desc: (intended for Unix/Linux)
+#desc: Intended for Unix/Systems. Interpretor for Postscript.
 
 #used to check if data is numeric for arithmetic operators
 from numbers import Number
@@ -30,7 +30,7 @@ def opPopn(n):
 
 #dictionary stack operators
 def dictPop():
-    """Pop opstack and return None on failure."""
+    """Pop dictstack and return None on failure."""
     if len(dictstack) >= 1:
         return dictstack.pop()
     else:
@@ -51,7 +51,7 @@ def define(name, value):
         return False
 
 def lookup(name):
-    """Return most recently defined value for name."""
+    """Return most recently defined value for name. None if not found."""
     for x in reversed(dictstack):
         for key in x:
             if key == name:
@@ -61,10 +61,12 @@ def lookup(name):
 
 
 #Arithmetic and comparison operators
-def binaryOpBase(operator):
-    """Pop opstack twice and push result of binary lambda operator."""
+def binaryOpBase(operator, numeric=True):
+    """Pop opstack twice and push result of binary lambda operator.
+    
+       Checks if args are numeric when numeric=True"""
     if len(opstack) >= 2:
-        if isNumeric(opstack[-2:]):
+        if isNumeric(opstack[-2:]) or not numeric:
             op2, op1 = opPopn(2)
             opPush(operator(op1, op2))
         else:
@@ -72,10 +74,12 @@ def binaryOpBase(operator):
     else:
         print('error: not enough arguments on opstack')
 
-def unaryOpBase(operator):
-    """Pop opstack and push result of unary lambd operator."""
+def unaryOpBase(operator, numeric=True):
+    """Pop opstack and push result of unary lambda operator.
+    
+       Checks if args are numeric when numeric=True"""
     if len(opstack) >= 1:
-        if isNumeric([opstack[-1]]):
+        if isNumeric([opstack[-1]]) or not numeric:
             opPush(operator(opPop()))
         else: print('error: argument must be numeric')
     else: print('error: not enough arguments on opstack')
@@ -119,3 +123,15 @@ def eq():
 def neg():
     """Pop opstack and push negation onto opstack."""
     unaryOpBase(lambda x:-x)
+
+#array operators
+
+#boolean operators
+def psAnd():
+    binaryOpBase(lambda x,y:x and y, False)
+
+def psOr():
+    binaryOpBase(lambda x,y:x or y, False)
+
+def psNot():
+    unaryOpBase(lambda x:not x, False)
