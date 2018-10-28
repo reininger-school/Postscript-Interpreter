@@ -179,3 +179,11 @@ def exch():
 
 def pop():
     return opPop()
+
+def copy():
+    def helper(ops):
+        push = list(ops[1:])
+        push.extend(push)
+        return reversed(push)
+
+    opBase(helper, nops=opstack[-1]+1)
