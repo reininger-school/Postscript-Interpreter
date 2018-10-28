@@ -187,3 +187,9 @@ def copy():
         return reversed(push)
 
     opBase(helper, nops=opstack[-1]+1)
+
+def clear():
+    opstack.clear()
+
+def stack():
+    pass
