@@ -64,3 +64,8 @@ def div():
     """Pop opstack twice and push op1 / op2 onto opstack."""
     op1, op2 = opPopn(2)
     opPush(op1 / op2)
+
+def mod():
+    """Pop opstack twice and push op1 % op2 ont opstack."""
+    op1, op2 = opPopn(2)
+    opPush(op1 % op2)
