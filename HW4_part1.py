@@ -69,3 +69,8 @@ def mod():
     """Pop opstack twice and push op1 % op2 ont opstack."""
     op2, op1 = opPopn(2)
     opPush(op1 % op2)
+
+def neg():
+    """Pop opstack and push negation onto opstack."""
+    op1 = opPop()
+    opPush(-op1)
