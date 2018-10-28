@@ -2,6 +2,9 @@
 #date: 10/24/18
 #desc: (intended for Unix/Linux)
 
+#used to check if data is numeric for arithmetic functions
+from numbers import Number
+
 #globals
 opstack = []
 dictstack = [{}]
@@ -45,6 +48,16 @@ def lookup(name):
         print('error: name not found')
 
 #Arithmetic and comparison operators
+
+#helper function
+def isNumeric(*args):
+    """Return true if all args are numeric."""
+    for x in args:
+        if not isinstance(x, Number):
+            return False
+    else:
+        return True
+
 def add():
     """Pop opstack twice and push sum onto opstack."""
     op2, op1 = opPopn(2)
