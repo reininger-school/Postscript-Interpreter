@@ -58,6 +58,11 @@ def isNumeric(*args):
     else:
         return True
 
+#helper function
+def opSize():
+    """Return number of values in opstack."""
+    return len(opstack)
+
 def add():
     """Pop opstack twice and push sum onto opstack."""
     op2, op1 = opPopn(2)
