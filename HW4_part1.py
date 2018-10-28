@@ -61,12 +61,12 @@ def lookup(name):
 
 
 #Arithmetic and comparison operators
-def binaryOpBase(operator, numeric=True):
+def binaryOpBase(operator, typeCheck=lambda x:True):
     """Pop opstack twice and push result of binary lambda operator.
     
-       Checks if args are numeric when numeric=True"""
+       typeCheck is an optional boolean function to validate args."""
     if len(opstack) >= 2:
-        if isNumeric(opstack[-2:]) or not numeric:
+        if typeCheck(opstack[-2:]):
             op2, op1 = opPopn(2)
             opPush(operator(op1, op2))
         else:
@@ -74,12 +74,12 @@ def binaryOpBase(operator, numeric=True):
     else:
         print('error: not enough arguments on opstack')
 
-def unaryOpBase(operator, numeric=True):
+def unaryOpBase(operator, typeCheck=lambda x:True):
     """Pop opstack and push result of unary lambda operator.
     
-       Checks if args are numeric when numeric=True"""
+       typeCheck is an optional boolean function to validate args."""
     if len(opstack) >= 1:
-        if isNumeric([opstack[-1]]) or not numeric:
+        if typeCheck([opstack[-1]]):
             opPush(operator(opPop()))
         else: print('error: argument must be numeric')
     else: print('error: not enough arguments on opstack')
@@ -94,44 +94,44 @@ def isNumeric(args):
 
 def add():
     """Pop opstack twice and push sum."""
-    binaryOpBase(lambda x,y:x+y)
+    binaryOpBase(lambda x,y:x+y, isNumeric)
 
 def sub():
     """Pop opstack twice and push difference."""
-    binaryOpBase(lambda x,y:x-y)
+    binaryOpBase(lambda x,y:x-y, isNumeric)
 
 def mul():
     """Pop opstack twice and push product."""
-    binaryOpBase(lambda x,y:x*y)
+    binaryOpBase(lambda x,y:x*y, isNumeric)
 
 def mod():
     """Pop opstack twice and push remainder."""
-    binaryOpBase(lambda x,y:x%y)
+    binaryOpBase(lambda x,y:x%y, isNumeric)
 
 def lt():
     """Pop opstack twice and push result of op1<op2."""
-    binaryOpBase(lambda x,y:x<y)
+    binaryOpBase(lambda x,y:x<y, isNumeric)
 
 def gt():
     """Pop opstack twice and push result of op1>op2."""
-    binaryOpBase(lambda x,y:x>y)
+    binaryOpBase(lambda x,y:x>y, isNumeric)
 
 def eq():
     """Pop opstack twice and push result of op1==op2."""
-    binaryOpBase(lambda x,y:x==y)
+    binaryOpBase(lambda x,y:x==y, isNumeric)
 
 def neg():
     """Pop opstack and push negation onto opstack."""
-    unaryOpBase(lambda x:-x)
+    unaryOpBase(lambda x:-x, isNumeric)
 
 #array operators
 
 #boolean operators
 def psAnd():
-    binaryOpBase(lambda x,y:x and y, False)
+    binaryOpBase(lambda x,y:x and y)
 
 def psOr():
-    binaryOpBase(lambda x,y:x or y, False)
+    binaryOpBase(lambda x,y:x or y)
 
 def psNot():
-    unaryOpBase(lambda x:not x, False)
+    unaryOpBase(lambda x:not x)
