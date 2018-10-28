@@ -31,7 +31,7 @@ def opPopn(n):
 #dictionary stack operators
 def dictPop():
     """Pop opstack and return None on failure."""
-    if len(dictstack) >= 1:
+    if dictSize() >= 1:
         return dictstack.pop()
     else:
         print('error: not enough items in dictstack')
@@ -41,8 +41,14 @@ def dictPush():
     return dictstack.append({})
 
 def define(name, value):
-    """Add name:value pair to top dict in dictstack."""
-    dictstack[-1][name] = value
+    """Add name:value pair to top dict in dictstack. Return True on
+success."""
+    if dictSize() > 0:
+        dictstack[-1][name] = value
+        return True
+    else:
+        print('error: dictstack is empty')
+        return False
 
 def lookup(name):
     """Return most recently defined value for name."""
@@ -53,9 +59,7 @@ def lookup(name):
     else:
         print('error: name not found')
 
-#Arithmetic and comparison operators
-
-#helper function
+#helper functions
 def isNumeric(*args):
     """Return true if all args are numeric."""
     for x in args:
@@ -64,11 +68,15 @@ def isNumeric(*args):
     else:
         return True
 
-#helper function
 def opSize():
     """Return number of values in opstack."""
     return len(opstack)
 
+def dictSize():
+    """Return number of dicitonaries in dictstack."""
+    return len(dictstack)
+
+#Arithmetic and comparison operators
 def add():
     """Pop opstack twice and push sum onto opstack."""
     op2, op1 = opPopn(2)
