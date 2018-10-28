@@ -81,7 +81,7 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
             ops = opPopn(nops)
             opPush(operator(ops))
         else:
-            print('error: arguments must be numeric')
+            print('error: arguments of incorrect type')
     else:
         print('error: not enough arguments on opstack')
 
@@ -126,15 +126,23 @@ def neg():
     opBase(lambda x:-x[0], isNumeric, 1)
 
 #boolean operators
+def isBool(args):
+    """Return true if all values in args are numeric."""
+    for x in args:
+        if not isinstance(x, bool):
+            return False
+    else:
+        return True
+
 def psAnd():
     """Pop opstack twice and push result of op1 AND op2."""
-    opBase(lambda x:x[0] and x[1])
+    opBase(lambda x:x[0] and x[1], isBool)
 
 def psOr():
     """Pop opstack twice and push result of op1 OR op2."""
-    opBase(lambda x:x[0] or x[1])
+    opBase(lambda x:x[0] or x[1], isBool)
 
 def psNot():
     """Pop opstack and push result of NOT."""
-    opBase(lambda x:not x[0], nops=1)
+    opBase(lambda x:not x[0], isBool, nops=1)
 
