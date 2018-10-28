@@ -61,28 +61,19 @@ def lookup(name):
 
 
 #Arithmetic and comparison operators
-def binaryOpBase(operator, typeCheck=lambda x:True):
-    """Pop opstack twice and push result of binary lambda operator.
-    
-       typeCheck is an optional boolean function to validate args."""
-    if len(opstack) >= 2:
-        if typeCheck(opstack[-2:]):
-            op2, op1 = opPopn(2)
-            opPush(operator(op1, op2))
+def opBase(operator, typeCheck=lambda x:True, nops=2):
+    """Base function for operand functions.
+
+       Pop nops items off opstack, and push the result of operator. typeCheck
+	   is an optional boolean func to check the popped arguments."""
+    if len(opstack) >= nops:
+        if typeCheck(opstack[-nops:]):
+            ops = opPopn(nops)
+            opPush(operator(ops))
         else:
             print('error: arguments must be numeric')
     else:
         print('error: not enough arguments on opstack')
-
-def unaryOpBase(operator, typeCheck=lambda x:True):
-    """Pop opstack and push result of unary lambda operator.
-    
-       typeCheck is an optional boolean function to validate args."""
-    if len(opstack) >= 1:
-        if typeCheck([opstack[-1]]):
-            opPush(operator(opPop()))
-        else: print('error: argument must be numeric')
-    else: print('error: not enough arguments on opstack')
 
 def isNumeric(args):
     """Return true if all values in args are numeric."""
@@ -122,16 +113,19 @@ def eq():
 
 def neg():
     """Pop opstack and push negation onto opstack."""
-    unaryOpBase(lambda x:-x, isNumeric)
+    opBase(lambda x:-x[0], isNumeric, 1)
 
 #array operators
 
 #boolean operators
 def psAnd():
+	"""Pop opstack twice and push result of op1 AND op2."""
     binaryOpBase(lambda x,y:x and y)
 
 def psOr():
+	"""Pop opstack twice and push result of op1 OR op2."""
     binaryOpBase(lambda x,y:x or y)
 
 def psNot():
-    unaryOpBase(lambda x:not x)
+	"""Pop opstack and push result of NOT."""
+    opBase(lambda x:not x[0], nops=1)
