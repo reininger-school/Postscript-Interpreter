@@ -22,7 +22,7 @@ def opPush(value):
     return opstack.append(value)
 
 def opPopn(n):
-    """Pop n values from opstack and return as tuple"""
+    """Pop n values from opstack and return as tuple or None on fail."""
     if len(opstack) >= n:
         return tuple(opPop() for x in range(n))
     else:
