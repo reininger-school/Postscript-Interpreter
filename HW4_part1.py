@@ -11,8 +11,11 @@ dictstack = [{}]
 
 #operand stack operators
 def opPop():
-    """Pop opstack."""
-    return opstack.pop()
+    """Pop opstack and return None on failure."""
+    if opSize() >= 1:
+        return opstack.pop()
+    else:
+        print('error: not enough items in opstack')
 
 def opPush(value):
     """Push value onto opstack."""
