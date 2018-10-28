@@ -125,6 +125,14 @@ def neg():
     """Pop opstack and push negation onto opstack."""
     opBase(lambda x:-x[0], isNumeric, 1)
 
+#array operators
+def length():
+	"""Pop array from stack and push lenght of array."""
+	opBase(lambda x:len(x[0]), nops=1)
+
+def get():
+	pass
+
 #boolean operators
 def isBool(args):
     """Return true if all values in args are numeric."""
