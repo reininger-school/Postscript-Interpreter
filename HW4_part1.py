@@ -2,7 +2,7 @@
 #date: 10/24/18
 #desc: (intended for Unix/Linux)
 
-#used to check if data is numeric for arithmetic functions
+#used to check if data is numeric for arithmetic operators
 from numbers import Number
 
 #globals
@@ -12,7 +12,7 @@ dictstack = [{}]
 #operand stack operators
 def opPop():
     """Pop opstack and return None on failure."""
-    if opSize() >= 1:
+    if len(opstack) >= 1:
         return opstack.pop()
     else:
         print('error: not enough items in opstack')
@@ -31,7 +31,7 @@ def opPopn(n):
 #dictionary stack operators
 def dictPop():
     """Pop opstack and return None on failure."""
-    if dictSize() >= 1:
+    if len(dictstack) >= 1:
         return dictstack.pop()
     else:
         print('error: not enough items in dictstack')
@@ -42,8 +42,8 @@ def dictPush():
 
 def define(name, value):
     """Add name:value pair to top dict in dictstack. Return True on
-success."""
-    if dictSize() > 0:
+       success."""
+    if len(dictstack) > 0:
         dictstack[-1][name] = value
         return True
     else:
