@@ -44,3 +44,8 @@ def lookup(name):
     else:
         print('error: name not found')
 
+#Arithmetic and comparison operators
+def add():
+	"""Pop opstack twice and push sum onto opstack."""
+	op1, op2 = opPopn(2)
+	opPush(op1 + op2)
