@@ -15,6 +15,10 @@ def opPush(value):
     """Push value onto opstack."""
     return opstack.append(value)
 
+def opPopn(n):
+	"""Pop n values from opstack and return as tuple"""
+	return tuple(opPop() for x in range(n))
+
 #dictionary stack operators
 def dictPop():
     """Pop dictstack."""
@@ -36,3 +40,4 @@ def lookup(name):
                 return x[key]
     else:
         print('error: name not found')
+
