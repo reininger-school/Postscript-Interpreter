@@ -178,9 +178,11 @@ def exch():
     opBase(lambda x:x, nops = 2)
 
 def pop():
+    """Pop opstack and return value."""
     return opPop()
 
 def copy():
+    """Pop opstack and copy the top op1 values onto opstack."""
     def helper(ops):
         push = list(ops[1:])
         push.extend(push)
@@ -189,6 +191,7 @@ def copy():
     opBase(helper, nops=opstack[-1]+1)
 
 def clear():
+    """Clear all items from opstack."""
     opstack.clear()
 
 def stack():
