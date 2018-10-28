@@ -173,3 +173,6 @@ def dup():
     else:
         print('error: not enough arguments on opstack')
 
+def exch():
+    """Exchange top two opstack values."""
+    opBase(lambda x:x, nops = 2)
