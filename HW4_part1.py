@@ -59,6 +59,10 @@ def lookup(name):
     else:
         print('error: name not found')
 
+def begin():
+	if len(opstack) > 0 and isinstance(opstack[-1], dict):
+		dictPush(opPop())
+
 
 #Arithmetic and comparison operators
 def opBase(operator, typeCheck=lambda x:True, nops=2):
@@ -116,6 +120,7 @@ def neg():
     opBase(lambda x:-x[0], isNumeric, 1)
 
 #array operators
+
 
 #boolean operators
 def psAnd():
