@@ -84,3 +84,8 @@ def gt():
     """Pop opstack twice and push result of op1>op2 onto opstack."""
     op2, op1 = opPopn(2)
     opPush(op1 > op2)
+
+def eq():
+    """Pop opstack twice and push result of op1==op2 onto opstack."""
+    op2, op1 = opPopn(2)
+    opPush(op1 == op2)
