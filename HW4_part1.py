@@ -30,8 +30,11 @@ def opPopn(n):
 
 #dictionary stack operators
 def dictPop():
-    """Pop dictstack."""
-    return dictstack.pop()
+    """Pop opstack and return None on failure."""
+    if len(dictstack) >= 1:
+        return dictstack.pop()
+    else:
+        print('error: not enough items in dictstack')
 
 def dictPush():
     """Push empty dict onto dictstack."""
