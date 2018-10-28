@@ -126,6 +126,15 @@ def neg():
     opBase(lambda x:-x[0], isNumeric, 1)
 
 #array operators
+def put():
+	"""Pop value, index, and array, push array[index] = val."""
+	def helper(ops):
+		val, index, arr = ops
+		arr[index] = val
+		return arr
+
+	opBase(helper, nops=3) 
+
 def length():
 	"""Pop array from stack and push lenght of array."""
 	opBase(lambda x:len(x[0]), nops=1)
