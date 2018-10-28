@@ -17,7 +17,10 @@ def opPush(value):
 
 def opPopn(n):
 	"""Pop n values from opstack and return as tuple"""
-	return tuple(opPop() for x in range(n))
+	if len(opstack) >= n:
+		return tuple(opPop() for x in range(n))
+	else:
+		print('error: not enough items in opstack')
 
 #dictionary stack operators
 def dictPop():
