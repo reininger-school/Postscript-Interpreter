@@ -74,3 +74,9 @@ def neg():
     """Pop opstack and push negation onto opstack."""
     op1 = opPop()
     opPush(-op1)
+
+def lt():
+    """Pop opstack twice and push result of op1<op2 onto opstack."""
+    op2, op1 = opPopn(2)
+    opPush(op1 < op2)
+
