@@ -47,25 +47,25 @@ def lookup(name):
 #Arithmetic and comparison operators
 def add():
     """Pop opstack twice and push sum onto opstack."""
-    op1, op2 = opPopn(2)
+    op2, op1 = opPopn(2)
     opPush(op1 + op2)
 
 def sub():
     """Pop opstack twice and push op1 - op2 onto opstack."""
-    op1, op2 = opPopn(2)
+    op2, op1 = opPopn(2)
     opPush(op1 - op2)
 
 def mul():
     """Pop opstack twice and push product onto opstack."""
-    op1, op2 = opPopn(2)
+    op2, op1 = opPopn(2)
     opPush(op1 * op2)
 
 def div():
     """Pop opstack twice and push op1 / op2 onto opstack."""
-    op1, op2 = opPopn(2)
+    op2, op1 = opPopn(2)
     opPush(op1 / op2)
 
 def mod():
     """Pop opstack twice and push op1 % op2 ont opstack."""
-    op1, op2 = opPopn(2)
+    op2, op1 = opPopn(2)
     opPush(op1 % op2)
