@@ -131,7 +131,8 @@ def length():
 	opBase(lambda x:len(x[0]), nops=1)
 
 def get():
-	pass
+	"""Pop index and array from opstack and push val array[index]."""
+	opBase(lambda x:x[1][x[0]])
 
 #boolean operators
 def isBool(args):
