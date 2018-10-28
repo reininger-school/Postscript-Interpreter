@@ -19,3 +19,11 @@ def dictPush():
 
 def define(name, value):
     dictstack[-1][name] = value
+
+def lookup(name):
+    for x in reversed(dictstack):
+        for key in x:
+            if key == name:
+                return x[key]
+    else:
+        print('error: name not found')
