@@ -16,11 +16,11 @@ def opPush(value):
     return opstack.append(value)
 
 def opPopn(n):
-	"""Pop n values from opstack and return as tuple"""
-	if len(opstack) >= n:
-		return tuple(opPop() for x in range(n))
-	else:
-		print('error: not enough items in opstack')
+    """Pop n values from opstack and return as tuple"""
+    if len(opstack) >= n:
+        return tuple(opPop() for x in range(n))
+    else:
+        print('error: not enough items in opstack')
 
 #dictionary stack operators
 def dictPop():
@@ -46,6 +46,11 @@ def lookup(name):
 
 #Arithmetic and comparison operators
 def add():
-	"""Pop opstack twice and push sum onto opstack."""
-	op1, op2 = opPopn(2)
-	opPush(op1 + op2)
+    """Pop opstack twice and push sum onto opstack."""
+    op1, op2 = opPopn(2)
+    opPush(op1 + op2)
+
+def sub():
+    """Pop opstack twice and push op1 - op2 onto opstack."""
+    op1, op2 = opPopn(2)
+    opPush(op1 - op2)
