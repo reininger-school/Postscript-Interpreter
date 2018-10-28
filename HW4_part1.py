@@ -28,6 +28,12 @@ def opPopn(n):
     else:
         print('error: not enough items in opstack')
 
+def dup():
+	if len(opstack) > 0:
+		opPush(opstack[-1])
+	else:
+		print('error: not enough arguments on opstack')
+
 #dictionary stack operators
 def dictPop():
     """Pop dictstack and return None on failure."""
