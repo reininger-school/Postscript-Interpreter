@@ -5,6 +5,9 @@
 #used to check if data is numeric for arithmetic operators
 from numbers import Number
 
+#to check for iterable object types
+from collections.abc import Iterable
+
 #globals
 opstack = []
 dictstack = [{}]
@@ -73,7 +76,12 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
     if len(opstack) >= nops:
         if typeCheck(opstack[-nops:]):
             ops = opPopn(nops)
-            opPush(operator(ops))
+            results = operator(ops)
+            if isinstance(results, Iterable):
+                for x in results:
+                    opPush(x)
+            else:
+                opPush(results)
         else:
             print('error: arguments of incorrect type')
     else:
