@@ -3,7 +3,7 @@
 #desc: (intended for Unix/Linux)
 
 opstack = []
-dictstack = []
+dictstack = [{}]
 
 def opPop():
     return opstack.pop()
@@ -16,3 +16,6 @@ def dictPop():
 
 def dictPush():
     return dictstack.append({})
+
+def define(name, value):
+    dictstack[-1][name] = value
