@@ -28,12 +28,6 @@ def opPopn(n):
     else:
         print('error: not enough items in opstack')
 
-def dup():
-	if len(opstack) > 0:
-		opPush(opstack[-1])
-	else:
-		print('error: not enough arguments on opstack')
-
 #dictionary stack operators
 def dictPop():
     """Pop dictstack and return None on failure."""
@@ -127,21 +121,21 @@ def neg():
 
 #array operators
 def put():
-	"""Pop value, index, and array, push array[index] = val."""
-	def helper(ops):
-		val, index, arr = ops
-		arr[index] = val
-		return arr
+    """Pop value, index, and array, push array[index] = val."""
+    def helper(ops):
+        val, index, arr = ops
+        arr[index] = val
+        return arr
 
-	opBase(helper, nops=3) 
+    opBase(helper, nops=3) 
 
 def length():
-	"""Pop array from stack and push lenght of array."""
-	opBase(lambda x:len(x[0]), nops=1)
+    """Pop array from stack and push lenght of array."""
+    opBase(lambda x:len(x[0]), nops=1)
 
 def get():
-	"""Pop index and array from opstack and push val array[index]."""
-	opBase(lambda x:x[1][x[0]])
+    """Pop index and array from opstack and push val array[index]."""
+    opBase(lambda x:x[1][x[0]])
 
 #boolean operators
 def isBool(args):
@@ -163,4 +157,11 @@ def psOr():
 def psNot():
     """Pop opstack and push result of NOT."""
     opBase(lambda x:not x[0], isBool, nops=1)
+
+#stack manipulation operators
+def dup():
+    if len(opstack) > 0:
+        opPush(opstack[-1])
+    else:
+        print('error: not enough arguments on opstack')
 
