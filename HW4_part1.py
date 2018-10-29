@@ -1,6 +1,7 @@
 #programmer: Reid Reininger(charles.reininger@wsu.edu)
 #date: 10/24/18
-#desc: Intended for Unix/Systems. Interpretor for Postscript.
+#desc: Intended for Unix/Linux Systems. Interpreter for Simplified
+#       Postscript(SPS).
 
 #used to check if data is numeric for arithmetic operators
 from numbers import Number
@@ -10,7 +11,7 @@ from collections.abc import Iterable
 
 #globals
 opstack = []
-dictstack = [{}]
+dictstack = []
 
 #operand stack operators
 def opPop():
@@ -22,7 +23,7 @@ def opPop():
 
 def opPush(value):
     """Push value onto opstack."""
-    return opstack.append(value)
+    opstack.append(value)
 
 def opPopn(n):
     """Pop n values from opstack and return as tuple or None on fail."""
@@ -39,15 +40,22 @@ def dictPop():
     else:
         print('error: not enough items in dictstack')
 
-def dictPush(dict={}):
-    """Push empty dict onto dictstack."""
-    return dictstack.append(dict)
+def dictPush(dictionary={}):
+    """Push empty dict onto dictstack by default and return False on failure."""
+    if isinstance(dictionary, dict):
+        dictstack.append(dictionary)
+        return True
+    else:
+        print('error: only dictionaries may be pushed to dictstack')
+        return False
 
 def define(name, value):
-    """Add name:value pair to top dict in dictstack."""
+    """Add name:value pair to top dict in dictstack and return False on fail."""
+    #if no dictionary in dictstack, push an empty one
     if len(dictstack) < 1:
         dictPush()
-    dictstack[-1][name[1:]] = value
+    #add name:value pair to top dict
+    dictstack[-1][name] = value
 
 def lookup(name):
     """Return most recently defined value for name. None if not found."""
