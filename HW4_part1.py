@@ -39,9 +39,9 @@ def dictPop():
     else:
         print('error: not enough items in dictstack')
 
-def dictPush():
+def dictPush(dict={}):
     """Push empty dict onto dictstack."""
-    return dictstack.append({})
+    return dictstack.append(dict)
 
 def define(name, value):
     """Add name:value pair to top dict in dictstack. Return True on
@@ -61,10 +61,6 @@ def lookup(name):
                 return x[key]
     else:
         print('error: name not found')
-
-def begin():
-    if len(opstack) > 0 and isinstance(opstack[-1], dict):
-        dictPush(opPop())
 
 
 #Arithmetic and comparison operators
@@ -198,3 +194,17 @@ def stack():
     """Diplay contents of opstack."""
     for x in reversed(opstack):
         print(x)
+
+#dictionary manipulation operators
+def psDict():
+    pass
+
+def begin():
+    if len(opstack) > 0 and isinstance(opstack[-1], dict):
+        dictPush(opPop())
+
+def end():
+    pass
+
+def psDef():
+    pass
