@@ -211,7 +211,7 @@ def dup():
 
 def exch():
     """Exchange top two opstack values."""
-    opBase(lambda x:x, nops = 2)
+    opBase(lambda x:x)
 
 def pop():
     """Pop opstack and return value."""
