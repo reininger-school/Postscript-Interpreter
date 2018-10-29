@@ -71,10 +71,12 @@ def define(name, value):
         return False
 
 def lookup(name):
-    """Return most recently defined value for name. None if not found."""
+    """Return most recently defined value for name. None if not found.
+    
+       name should not have a leading '/'."""
     for x in reversed(dictstack):
         for key in x:
-            if key == name:
+            if key == '/'+name:
                 return x[key]
     else:
         print('error: name not found')
