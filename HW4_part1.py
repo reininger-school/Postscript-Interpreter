@@ -57,7 +57,7 @@ def define(name, value):
         tests = []
         tests.append(string[0] == '/')
         tests.append(string[1].isalpha())
-        tests.append(string.isalnum())
+        tests.append(string[1:].isalnum())
         return all(tests)
 
     if isValidName(name):
