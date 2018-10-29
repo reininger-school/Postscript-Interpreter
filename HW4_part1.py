@@ -85,8 +85,8 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
 
        Pop nops items off opstack, and push the result of operator. If result
        is iterable it is iterated over pushing each item to opstack, otherwise
-       result is just pushed. typeCheck is an optional boolean func to check
-       the popped arguments."""
+       result is just pushed. typeCheck is an optional boolean func accepting
+       tuple of args in popped order to check the popped arguments."""
 
     #check operation is valid
     tests = []
