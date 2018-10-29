@@ -155,12 +155,19 @@ def neg():
 #array operators
 def put():
     """Pop value, index, and array, push array[index] = val."""
-    def helper(ops):
+    def operation(ops):
         val, index, arr = ops
         arr[index] = val
         return arr
 
-    opBase(helper, nops=3) 
+    def typeCheck(ops):
+        tests = []
+        arr, index, val = ops
+        tests.append(isinstance(index, int))
+        tests.append(isinstance(arr, list))
+        return all(tests)
+
+    opBase(operation, typeCheck, 3) 
 
 def length():
     """Pop array from stack and push lenght of array."""
