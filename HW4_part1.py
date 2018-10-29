@@ -86,21 +86,30 @@ def lookup(name):
 def opBase(operator, typeCheck=lambda x:True, nops=2):
     """Base function for operand functions.
 
-       Pop nops items off opstack, and push the result of operator. typeCheck
-       is an optional boolean func to check the popped arguments."""
-    if len(opstack) >= nops:
-        if typeCheck(opstack[-nops:]):
-            ops = opPopn(nops)
-            results = operator(ops)
-            if isinstance(results, Iterable):
-                for x in results:
-                    opPush(x)
-            else:
-                opPush(results)
+       Pop nops items off opstack, and push the result of operator. If result
+       is iterable it is iterated over pushing each item to opstack, otherwise
+       result is just pushed. typeCheck is an optional boolean func to check
+       the popped arguments."""
+
+    #check operation is valid
+    tests = []
+    tests.append(len(opstack) >= nops)
+    tests.append(typeCheck(opstack[-nops:]))
+
+    #exe operation
+    if all(tests):
+        ops = opPopn(nops)
+        results = operator(ops)
+        if isinstance(results, Iterable):
+            for x in results:
+                opPush(x)
         else:
-            print('error: arguments of incorrect type')
+            opPush(results)
     else:
-        print('error: not enough arguments on opstack')
+        if not test[0]:
+            print('error: not enough arguments on opstack')
+        if not test[1]:
+            print('error: arguments of incorrect type')
 
 def isNumeric(args):
     """Return true if all values in args are numeric."""
