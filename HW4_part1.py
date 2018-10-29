@@ -197,7 +197,8 @@ def stack():
 
 #dictionary manipulation operators
 def psDict():
-    pass
+    opBase(lambda x:(), isNumeric, 1)
+    opPush({})
 
 def begin():
     if len(opstack) > 0 and isinstance(opstack[-1], dict):
