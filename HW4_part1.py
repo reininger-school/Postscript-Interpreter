@@ -3,9 +3,6 @@
 #desc: Intended for Unix/Linux Systems. Interpreter for Simplified
 #       Postscript(SPS).
 
-#used to check if data is numeric for arithmetic operators
-from numbers import Number
-
 #to check for iterable object types
 from collections.abc import Iterable
 
@@ -93,8 +90,8 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
 
     #check operation is valid
     tests = []
-    tests.append(len(opstack) >= nops)
-    tests.append(typeCheck(opstack[-nops:]))
+    tests.append(len(opstack) >= nops) #check enough items on stack
+    tests.append(typeCheck(opstack[-nops:])) #type check args
 
     #exe operation
     if all(tests):
@@ -114,7 +111,7 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
 def isNumeric(args):
     """Return true if all values in args are numeric."""
     for x in args:
-        if not isinstance(x, Number):
+        if not isinstance(x, (int, float)):
             return False
     else:
         return True
