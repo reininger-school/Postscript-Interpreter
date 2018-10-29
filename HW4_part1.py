@@ -195,4 +195,6 @@ def clear():
     opstack.clear()
 
 def stack():
-    pass
+    """Diplay contents of opstack."""
+    for x in reversed(opstack):
+        print(x)
