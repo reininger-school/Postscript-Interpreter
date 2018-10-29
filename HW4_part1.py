@@ -205,8 +205,18 @@ def begin():
         dictPush(opPop())
 
 def end():
-	"""Pop dictstack."""
-	dictstack.pop()
+    """Pop dictstack."""
+    dictstack.pop()
 
 def psDef():
-    pass
+    #if no dict on stack, create one
+    if len(dictstack) < 1:
+        dictPush()
+    
+    def helper(ops):
+        val, name = ops
+        dictstack[-1][name] = val
+        return ()
+
+    opBase(helper, nops=2)
+
