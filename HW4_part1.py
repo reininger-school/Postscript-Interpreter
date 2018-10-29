@@ -219,12 +219,12 @@ def pop():
 
 def copy():
     """Pop opstack and copy the top op1 values onto opstack."""
-    def helper(ops):
+    def operation(ops):
         push = list(ops[1:])
         push.extend(push)
         return reversed(push)
 
-    opBase(helper, nops=opstack[-1]+1)
+    opBase(operation, nops=opstack[-1]+1)
 
 def clear():
     """Clear all items from opstack."""
@@ -252,12 +252,13 @@ def end():
     dictstack.pop()
 
 def psDef():
-    def helper(ops):
+    """Pop a value then name off opstack and add definition."""
+    def operation(ops):
         val, name = ops
         define(name, val)
         return ()
 
-    opBase(helper, nops=2)
+    opBase(operation, nops=2)
 
 #-------------------------TEST FUNCTIONS--------------------------------
 
