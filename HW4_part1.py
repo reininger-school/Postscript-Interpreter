@@ -205,7 +205,8 @@ def begin():
         dictPush(opPop())
 
 def end():
-    pass
+	"""Pop dictstack."""
+	dictstack.pop()
 
 def psDef():
     pass
