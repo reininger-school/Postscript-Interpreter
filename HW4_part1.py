@@ -243,6 +243,7 @@ def psDict():
     opPush({})
 
 def begin():
+    """Pop dict from opstack and push onto dictstack."""
     if len(opstack) > 0 and isinstance(opstack[-1], dict):
         dictPush(opPop())
 
