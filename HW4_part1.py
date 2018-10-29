@@ -51,11 +51,24 @@ def dictPush(dictionary={}):
 
 def define(name, value):
     """Add name:value pair to top dict in dictstack and return False on fail."""
-    #if no dictionary in dictstack, push an empty one
-    if len(dictstack) < 1:
-        dictPush()
-    #add name:value pair to top dict
-    dictstack[-1][name] = value
+
+    def isValidName(string):
+        """Return true if string is a valid name."""
+        tests = []
+        tests.append(string[0] == '/')
+        tests.append(string[1].isalpha())
+        tests.append(string.isalnum())
+        return all(tests)
+
+    if isValidName(name):
+        #if no dictionary in dictstack, push an empty one
+        if len(dictstack) < 1:
+            dictPush()
+        #add name:value pair to top dict
+        dictstack[-1][name] = value
+        return True
+    else:
+        return False
 
 def lookup(name):
     """Return most recently defined value for name. None if not found."""
