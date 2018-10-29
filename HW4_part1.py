@@ -93,31 +93,35 @@ def isNumeric(args):
 
 def add():
     """Pop opstack twice and push sum."""
-    opBase(lambda x:x[0]+x[1], isNumeric)
+    opBase(lambda x:x[1]+x[0], isNumeric)
 
 def sub():
     """Pop opstack twice and push difference."""
-    opBase(lambda x:x[0]-x[1], isNumeric)
+    opBase(lambda x:x[1]-x[0], isNumeric)
 
 def mul():
     """Pop opstack twice and push product."""
-    opBase(lambda x:x[0]*x[1], isNumeric)
+    opBase(lambda x:x[1]*x[0], isNumeric)
+
+def div():
+	"""Pop opstack twice and push quotient."""
+	opBase(lambda x:x[1]/x[0], isNumeric)
 
 def mod():
     """Pop opstack twice and push remainder."""
-    opBase(lambda x:x[0]%x[1], isNumeric)
+    opBase(lambda x:x[1]%x[0], isNumeric)
 
 def lt():
     """Pop opstack twice and push result of op1<op2."""
-    opBase(lambda x:x[0]<x[1], isNumeric)
+    opBase(lambda x:x[1]<x[0], isNumeric)
 
 def gt():
     """Pop opstack twice and push result of op1>op2."""
-    opBase(lambda x:x[0]>x[1], isNumeric)
+    opBase(lambda x:x[1]>x[0], isNumeric)
 
 def eq():
     """Pop opstack twice and push result of op1==op2."""
-    opBase(lambda x:x[0]==x[1], isNumeric)
+    opBase(lambda x:x[1]==x[0], isNumeric)
 
 def neg():
     """Pop opstack and push negation onto opstack."""
