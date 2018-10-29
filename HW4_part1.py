@@ -1,7 +1,7 @@
 #programmer: Reid Reininger(charles.reininger@wsu.edu)
 #date: 10/24/18
 #desc: Intended for Unix/Linux Systems. Interpreter for Simplified
-#       Postscript(SPS).
+#      Postscript(SPS).
 
 #to check for iterable object types
 from collections.abc import Iterable
@@ -269,7 +269,7 @@ dictstack = []  #assuming top of the stack is the end of the list
 
 
 #------- Part 1 TEST CASES--------------
-#These test cases provided by Sakire with my own added as well.
+#Test cases provided by Sakire and Reid Reininger.
 def testDefine():
     define("/n1", 4)
     if lookup("n1") != 4:
