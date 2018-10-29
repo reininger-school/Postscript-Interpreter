@@ -44,14 +44,10 @@ def dictPush(dict={}):
     return dictstack.append(dict)
 
 def define(name, value):
-    """Add name:value pair to top dict in dictstack. Return True on
-       success."""
-    if len(dictstack) > 0:
-        dictstack[-1][name] = value
-        return True
-    else:
-        print('error: dictstack is empty')
-        return False
+    """Add name:value pair to top dict in dictstack."""
+    if len(dictstack) < 1:
+        dictPush()
+    dictstack[-1][name[1:]] = value
 
 def lookup(name):
     """Return most recently defined value for name. None if not found."""
@@ -104,8 +100,8 @@ def mul():
     opBase(lambda x:x[1]*x[0], isNumeric)
 
 def div():
-	"""Pop opstack twice and push quotient."""
-	opBase(lambda x:x[1]/x[0], isNumeric)
+    """Pop opstack twice and push quotient."""
+    opBase(lambda x:x[1]/x[0], isNumeric)
 
 def mod():
     """Pop opstack twice and push remainder."""
@@ -213,13 +209,9 @@ def end():
     dictstack.pop()
 
 def psDef():
-    #if no dict on stack, create one
-    if len(dictstack) < 1:
-        dictPush()
-    
     def helper(ops):
         val, name = ops
-        dictstack[-1][name] = val
+        define(name, val)
         return ()
 
     opBase(helper, nops=2)
