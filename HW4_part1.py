@@ -175,7 +175,14 @@ def length():
 
 def get():
     """Pop index and array from opstack and push val array[index]."""
-    opBase(lambda x:x[1][x[0]])
+    def typeCheck(ops):
+        tests = []
+        arr, index = ops
+        tests.append(isinstance(arr, list))
+        tests.append(isinstance(index, int))
+        return all(tests)
+
+    opBase(lambda x:x[1][x[0]], typeCheck)
 
 #boolean operators
 def isBool(args):
@@ -196,7 +203,7 @@ def psOr():
 
 def psNot():
     """Pop opstack and push result of NOT."""
-    opBase(lambda x:not x[0], isBool, nops=1)
+    opBase(lambda x:not x[0], isBool, 1)
 
 #stack manipulation operators
 def dup():
