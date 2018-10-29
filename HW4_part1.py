@@ -205,12 +205,9 @@ def psNot():
     """Pop opstack and push result of NOT."""
     opBase(lambda x:not x[0], isBool, 1)
 
-#stack manipulation operators
+#stack manipulation and operators
 def dup():
-    if len(opstack) > 0:
-        opPush(opstack[-1])
-    else:
-        print('error: not enough arguments on opstack')
+    opBase(lambda x: [x[0], x[0]], nops=1)
 
 def exch():
     """Exchange top two opstack values."""
