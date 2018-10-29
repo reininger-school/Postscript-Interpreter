@@ -170,8 +170,8 @@ def put():
     opBase(operation, typeCheck, 3) 
 
 def length():
-    """Pop array from stack and push lenght of array."""
-    opBase(lambda x:len(x[0]), nops=1)
+    """Pop array from stack and push length of array."""
+    opBase(lambda x:len(x[0]), lambda x:isinstance(x[0], list), 1)
 
 def get():
     """Pop index and array from opstack and push val array[index]."""
