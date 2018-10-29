@@ -237,6 +237,8 @@ def stack():
 
 #dictionary manipulation operators
 def psDict():
+    """Pop integer off opstack and push an empty dict."""
+    #pop integer off stack
     opBase(lambda x:(), isNumeric, 1)
     opPush({})
 
