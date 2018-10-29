@@ -103,9 +103,9 @@ def opBase(operator, typeCheck=lambda x:True, nops=2):
         else:
             opPush(results)
     else:
-        if not test[0]:
+        if not tests[0]:
             print('error: not enough arguments on opstack')
-        if not test[1]:
+        if not tests[1]:
             print('error: arguments of incorrect type')
 
 def isNumeric(args):
