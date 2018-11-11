@@ -5,6 +5,7 @@
 
 #to check for iterable object types
 from collections.abc import Iterable
+import re
 
 #globals
 opstack = []
@@ -259,6 +260,11 @@ def psDef():
         return ()
 
     opBase(operation, nops=2)
+
+#-------------------------Part 2----------------------------------------
+def tokenize(s):
+    return re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0\
+        -9_\s!]*[]]|[-]?[0-9]+|[}{]+|%.*|[^ \t\n]", s)
 
 #-------------------------TEST FUNCTIONS--------------------------------
 
