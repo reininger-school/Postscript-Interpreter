@@ -277,6 +277,20 @@ def groupMatching2(it):
 			res.append(convert(c))
 	return False
 
+def tokenizeArray(s):
+	return re.findall('\[|\]|\d[0-9]*', s)
+
+def groupMatching3(it):
+	res = []
+	for c in it:
+		if c == ']':
+			return res
+		elif c == '[':
+			res.append(groupMatching3(it))
+		else:
+			res.append(int(c))
+	return res
+
 def convert(c):
 	#digit
 	if c.isdigit():
@@ -288,11 +302,13 @@ def convert(c):
 		return(False)
 	#array
 	elif c[0] == '[':
-		return(list(map(lambda x: int(x), c[1:-1].split())))
+		#return index 0 to remove outer list
+		return groupMatching3(iter(tokenizeArray(c)))[0]
 	#string
 	else:
 		return c
 
+#accepts list of tokens
 def parse(tokens):
 	res = []
 	it = iter(tokens)
