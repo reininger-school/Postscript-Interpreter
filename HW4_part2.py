@@ -266,6 +266,45 @@ def tokenize(s):
     return re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0\
         -9_\s!]*[]]|[-]?[0-9]+|[}{]+|%.*|[^ \t\n]", s)
 
+def groupMatching2(it):
+	res = []
+	for c in it:
+		if c == '}':
+			return res
+		elif c == '{':
+			res.append(groupMatching2(it))
+		else:
+			res.append(convert(c))
+	return False
+
+def convert(c):
+	#digit
+	if c.isdigit():
+		return int(c)
+	#boolean
+	elif c == 'true':
+		return(True)
+	elif c == 'false':
+		return(False)
+	#array
+	elif c[0] == '[':
+		return(list(map(lambda x: int(x), c[1:-1].split())))
+	#string
+	else:
+		return c
+
+def parse(tokens):
+	res = []
+	it = iter(tokens)
+	for c in it:
+		if c == '}':
+			return False
+		elif c == '{':
+			res.append(groupMatching2(it))
+		else:
+			res.append(convert(c))
+	return res
+
 #-------------------------TEST FUNCTIONS--------------------------------
 
 import re
