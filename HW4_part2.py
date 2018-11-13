@@ -262,10 +262,12 @@ def psDef():
     opBase(operation, nops=2)
 
 #-------------------------Part 2----------------------------------------
+#tokenizes an input string
 def tokenize(s):
     return re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0\
         -9_\s!]*[]]|[-]?[0-9]+|[}{]+|%.*|[^ \t\n]", s)
 
+#matches code arrays
 def groupMatching2(it):
 	res = []
 	for c in it:
@@ -277,9 +279,11 @@ def groupMatching2(it):
 			res.append(convert(c))
 	return False
 
+#tokenize an integer array
 def tokenizeArray(s):
 	return re.findall('\[|\]|\d[0-9]*', s)
 
+#matches integer arrays
 def groupMatching3(it):
 	res = []
 	for c in it:
@@ -291,6 +295,7 @@ def groupMatching3(it):
 			res.append(int(c))
 	return res
 
+#converts tokens to the correct python data type
 def convert(c):
 	#digit
 	if c.isdigit():
@@ -308,7 +313,7 @@ def convert(c):
 	else:
 		return c
 
-#accepts list of tokens
+#accepts list of tokens from tokenize, converting into correct python types
 def parse(tokens):
 	res = []
 	it = iter(tokens)
@@ -320,6 +325,10 @@ def parse(tokens):
 		else:
 			res.append(convert(c))
 	return res
+
+#interprets code arrays
+def interpretSPS(code):
+	pass
 
 #-------------------------TEST FUNCTIONS--------------------------------
 
