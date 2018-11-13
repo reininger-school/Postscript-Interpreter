@@ -281,7 +281,7 @@ def groupMatching2(it):
 
 #tokenize an integer array
 def tokenizeArray(s):
-	return re.findall('\[|\]|\d[0-9]*', s)
+	return re.findall('\[|\]|\d[0-9.]*', s)
 
 #matches integer arrays
 def groupMatching3(it):
@@ -292,14 +292,17 @@ def groupMatching3(it):
 		elif c == '[':
 			res.append(groupMatching3(it))
 		else:
-			res.append(int(c))
+			res.append(convert(c))
 	return res
 
 #converts tokens to the correct python data type
 def convert(c):
-	#digit
+	#integer
 	if c.isdigit():
 		return int(c)
+	#float
+	if c.replace('.','',1).isdigit():
+		return float(c)
 	#boolean
 	elif c == 'true':
 		return(True)
