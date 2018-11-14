@@ -52,6 +52,8 @@ def define(name, value):
 
     def isValidName(string):
         """Return true if string is a valid name."""
+        if not isinstance(string, str):
+            return False
         tests = []
         tests.append(string[0] == '/')
         tests.append(string[1].isalpha())
@@ -269,69 +271,102 @@ def tokenize(s):
 
 #matches code arrays
 def groupMatching2(it):
-	res = []
-	for c in it:
-		if c == '}':
-			return res
-		elif c == '{':
-			res.append(groupMatching2(it))
-		else:
-			res.append(convert(c))
-	return False
+    res = []
+    for c in it:
+        if c == '}':
+            return res
+        elif c == '{':
+            res.append(groupMatching2(it))
+        else:
+            res.append(convert(c))
+    return False
 
 #tokenize an integer array
 def tokenizeArray(s):
-	return re.findall('\[|\]|\d[0-9.]*', s)
+    return re.findall('\[|\]|\d[0-9.]*', s)
 
 #matches integer arrays
 def groupMatching3(it):
-	res = []
-	for c in it:
-		if c == ']':
-			return res
-		elif c == '[':
-			res.append(groupMatching3(it))
-		else:
-			res.append(convert(c))
-	return res
+    res = []
+    for c in it:
+        if c == ']':
+            return res
+        elif c == '[':
+            res.append(groupMatching3(it))
+        else:
+            res.append(convert(c))
+    return res
 
 #converts tokens to the correct python data type
 def convert(c):
-	#integer
-	if c.isdigit():
-		return int(c)
-	#float
-	if c.replace('.','',1).isdigit():
-		return float(c)
-	#boolean
-	elif c == 'true':
-		return(True)
-	elif c == 'false':
-		return(False)
-	#array
-	elif c[0] == '[':
-		#return index 0 to remove outer list
-		return groupMatching3(iter(tokenizeArray(c)))[0]
-	#string
-	else:
-		return c
+    #integer
+    if c.isdigit():
+        return int(c)
+    #float
+    if c.replace('.','',1).isdigit():
+        return float(c)
+    #boolean
+    elif c == 'true':
+        return(True)
+    elif c == 'false':
+        return(False)
+    #array
+    elif c[0] == '[':
+        #return index 0 to remove outer list
+        return groupMatching3(iter(tokenizeArray(c)))[0]
+    #string
+    else:
+        return c
 
 #accepts list of tokens from tokenize, converting into correct python types
 def parse(tokens):
-	res = []
-	it = iter(tokens)
-	for c in it:
-		if c == '}':
-			return False
-		elif c == '{':
-			res.append(groupMatching2(it))
-		else:
-			res.append(convert(c))
-	return res
+    res = []
+    it = iter(tokens)
+    for c in it:
+        if c == '}':
+            return False
+        elif c == '{':
+            res.append(groupMatching2(it))
+        else:
+            res.append(convert(c))
+    return res
 
 #interprets code arrays
 def interpretSPS(code):
-	pass
+    operators = {'add':add, 'sub':sub, 'mul':mul, 'div':div, 'mod':mod,
+    'lt':lt, 'gt':gt, 'eq':eq, 'neg':neg, 'put':put, 'length':length,
+    'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
+    'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, 'dict':psDict,
+    'begin':begin, 'end':end, 'def':psDef}
+
+    #handle each value
+    for value in code:
+        #value
+        if isinstance(value, (int, float, list)):
+            opPush(value)
+        #operator
+        elif value in operators:
+            operators[value]()
+        #name constant
+        elif isinstance(value, str) and value[0] == '/':
+            opPush(value)
+        #variable
+        elif isinstance(value, str):
+            lookupVal = lookup(value)
+            #check variable exists
+            if lookupVal:
+                #codeblock
+                if isinstance(lookupVal, list) and not all(isinstance(x, int)
+                    for x in lookupVal):
+                    interpretSPS(lookupVal)
+                #value
+                else:
+                    opPush(lookupVal)
+        else:
+            print('invalid input')
+
+def interpreter(s):
+    interpretSPS(parse(tokenize(s)))
 
 #-------------------------TEST FUNCTIONS--------------------------------
 
