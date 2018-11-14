@@ -270,6 +270,19 @@ def psDef():
     opBase(operation, nops=2)
 
 #-------------------------Part 2----------------------------------------
+
+#branch operators
+def psIf():
+	def operator(ops):
+		if ops[1]:
+			interpretSPS(ops[0])
+	def typecheck(ops):
+		return isinstance(ops[1], list) and not all(isinstance(x, int) for x in
+			ops[1]) and isinstance(ops[0], bool)
+	opBase(operator, typecheck)
+	#pop result of operator off of stack since no result is desired
+	opPop()
+
 #tokenizes an input string
 def tokenize(s):
     return re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0\
@@ -343,7 +356,8 @@ def interpretSPS(code):
     'lt':lt, 'gt':gt, 'eq':eq, 'neg':neg, 'put':put, 'length':length,
     'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
     'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, '=':popPrint,
-	'count':count, 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef}
+	'count':count, 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef,
+	'if':psIf, 'ifelse':psIfelse}
 
     #handle each value
     for value in code:
