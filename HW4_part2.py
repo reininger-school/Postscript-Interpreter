@@ -283,6 +283,22 @@ def psIf():
 	#pop result of operator off of stack since no result is desired
 	opPop()
 
+def psIfelse():
+	def operator(ops):
+		if ops[2]:
+			interpretSPS(ops[1])
+		else:
+			interpretSPS(ops[0])
+
+	def typecheck(ops):
+		return isinstance(ops[2], list) and not all(isinstance(x, int) for x in
+			ops[2]) and isinstance(ops[1], list) and not all(isinstance(x, int)
+			for x in ops[1]) and isinstance(ops[0], bool)
+	opBase(operator, typecheck, 3)
+	#pop result of operator off of stack since no result is desired
+	opPop()
+
+
 #tokenizes an input string
 def tokenize(s):
     return re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0\
