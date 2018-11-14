@@ -321,6 +321,28 @@ def psFor():
 	#pop result of operator off of stack since no result is desired
 	opPop()
 
+def forAll():
+	def operator(ops):
+		#unpack ops for clarity
+		procedure, arr = ops
+		for x in arr:
+			opPush(x)
+			interpretSPS(procedure)
+
+	def typecheck(ops):
+		#unpack ops for clarity
+		arr, procedure = ops
+		tests = []
+		tests.append(isinstance(arr, list) and all(isinstance(x, int) for x
+			in arr))
+		tests.append(isinstance(procedure, list) and
+			not all(isinstance(x, int) for x in procedure))
+		return all(tests)
+
+	opBase(operator, typecheck)
+	#pop result of operator off stack since no result is desird
+	opPop()
+		
 
 #tokenizes an input string
 def tokenize(s):
