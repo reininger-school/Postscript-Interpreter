@@ -241,6 +241,9 @@ def stack():
 def popPrint():
 	print(pop())
 
+def count():
+	opPush(len(opstack))
+
 #dictionary manipulation operators
 def psDict():
     """Pop integer off opstack and push an empty dict."""
@@ -340,7 +343,7 @@ def interpretSPS(code):
     'lt':lt, 'gt':gt, 'eq':eq, 'neg':neg, 'put':put, 'length':length,
     'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
     'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, '=':popPrint,
-	 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef}
+	'count':count, 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef}
 
     #handle each value
     for value in code:
