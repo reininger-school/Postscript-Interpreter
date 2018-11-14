@@ -238,6 +238,9 @@ def stack():
     for x in reversed(opstack):
         print(x)
 
+def popPrint():
+	print(pop())
+
 #dictionary manipulation operators
 def psDict():
     """Pop integer off opstack and push an empty dict."""
@@ -336,8 +339,8 @@ def interpretSPS(code):
     operators = {'add':add, 'sub':sub, 'mul':mul, 'div':div, 'mod':mod,
     'lt':lt, 'gt':gt, 'eq':eq, 'neg':neg, 'put':put, 'length':length,
     'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
-    'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, 'dict':psDict,
-    'begin':begin, 'end':end, 'def':psDef}
+    'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, '=':popPrint,
+	 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef}
 
     #handle each value
     for value in code:
