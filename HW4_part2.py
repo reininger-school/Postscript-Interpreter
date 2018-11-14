@@ -271,7 +271,7 @@ def psDef():
 
 #-------------------------Part 2----------------------------------------
 
-#branch operators
+#control operators
 def psIf():
 	def operator(ops):
 		if ops[1]:
@@ -295,6 +295,29 @@ def psIfelse():
 			ops[2]) and isinstance(ops[1], list) and not all(isinstance(x, int)
 			for x in ops[1]) and isinstance(ops[0], bool)
 	opBase(operator, typecheck, 3)
+	#pop result of operator off of stack since no result is desired
+	opPop()
+
+def psFor():
+	def operator(ops):
+		#unpack ops for clarity
+		code_array, final, incr, init = ops
+		for x in range(init, final+1):
+			opPush(x)
+			interpretSPS(code_array)
+
+	def typecheck(ops):
+		#unpack ops for clarity
+		init, incr, final, code_array = ops
+		tests = []
+		tests.append(isinstance(init, int))
+		tests.append(isinstance(incr, int))
+		tests.append(isinstance(final, int))
+		tests.append(isinstance(code_array, list) and
+			not all(isinstance(x, int) for x in code_array))
+		return all(tests)
+	
+	opBase(operator, typecheck, 4)
 	#pop result of operator off of stack since no result is desired
 	opPop()
 
@@ -373,7 +396,7 @@ def interpretSPS(code):
     'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
     'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, '=':popPrint,
 	'count':count, 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef,
-	'if':psIf, 'ifelse':psIfelse}
+	'if':psIf, 'ifelse':psIfelse, 'for':psFor, 'forall':forAll}
 
     #handle each value
     for value in code:
