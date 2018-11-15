@@ -1,5 +1,5 @@
 #programmer: Reid Reininger(charles.reininger@wsu.edu)
-#date: 10/24/18
+#date: 11/7/18
 #desc: Intended for Unix/Linux Systems. Interpreter for Simplified
 #      Postscript(SPS).
 
@@ -239,10 +239,10 @@ def stack():
         print(x)
 
 def popPrint():
-	print(pop())
+    print(pop())
 
 def count():
-	opPush(len(opstack))
+    opPush(len(opstack))
 
 #dictionary manipulation operators
 def psDict():
@@ -273,76 +273,80 @@ def psDef():
 
 #control operators
 def psIf():
-	def operator(ops):
-		if ops[1]:
-			interpretSPS(ops[0])
-	def typecheck(ops):
-		return isinstance(ops[1], list) and not all(isinstance(x, int) for x in
-			ops[1]) and isinstance(ops[0], bool)
-	opBase(operator, typecheck)
-	#pop result of operator off of stack since no result is desired
-	opPop()
+    def operator(ops):
+        if ops[1]:
+            interpretSPS(ops[0])
+    def typecheck(ops):
+        return isinstance(ops[1], list) and not all(isinstance(x, int) for x in ops[1]) and isinstance(ops[0], bool)
+    opBase(operator, typecheck)
+    #pop result of operator off of stack since no result is desired
+    opPop()
 
 def psIfelse():
-	def operator(ops):
-		if ops[2]:
-			interpretSPS(ops[1])
-		else:
-			interpretSPS(ops[0])
+    def operator(ops):
+        if ops[2]:
+            interpretSPS(ops[1])
+        else:
+            interpretSPS(ops[0])
 
-	def typecheck(ops):
-		return isinstance(ops[2], list) and not all(isinstance(x, int) for x in
-			ops[2]) and isinstance(ops[1], list) and not all(isinstance(x, int)
-			for x in ops[1]) and isinstance(ops[0], bool)
-	opBase(operator, typecheck, 3)
-	#pop result of operator off of stack since no result is desired
-	opPop()
+    def typecheck(ops):
+        return isinstance(ops[2], list) and isinstance(ops[1], list) and isinstance(ops[0], bool)
+    opBase(operator, typecheck, 3)
+    #pop result of operator off of stack since no result is desired
+    opPop()
 
 def psFor():
-	def operator(ops):
-		#unpack ops for clarity
-		code_array, final, incr, init = ops
-		for x in range(init, final+1):
-			opPush(x)
-			interpretSPS(code_array)
+    def operator(ops):
+        #unpack ops for clarity
+        code_array, final, incr, init = ops
+        #make range inclusive
+        if incr > 0:
+            end = final + 1
+        else:
+            end = final - 1
+        for x in range(init, end, incr):
+            opPush(x)
+            #print('after push: ', t.opstack)
+            interpretSPS(code_array)
+            #print('after eval: ', t.opstack)
 
-	def typecheck(ops):
-		#unpack ops for clarity
-		init, incr, final, code_array = ops
-		tests = []
-		tests.append(isinstance(init, int))
-		tests.append(isinstance(incr, int))
-		tests.append(isinstance(final, int))
-		tests.append(isinstance(code_array, list) and
-			not all(isinstance(x, int) for x in code_array))
-		return all(tests)
-	
-	opBase(operator, typecheck, 4)
-	#pop result of operator off of stack since no result is desired
-	opPop()
+    def typecheck(ops):
+        #unpack ops for clarity
+        init, incr, final, code_array = ops
+        tests = []
+        tests.append(isinstance(init, int))
+        tests.append(isinstance(incr, int))
+        tests.append(isinstance(final, int))
+        tests.append(isinstance(code_array, list) and
+            not all(isinstance(x, int) for x in code_array))
+        return all(tests)
+    
+    opBase(operator, typecheck, 4)
+    #pop result of operator off of stack since no result is desired
+    opPop()
 
 def forAll():
-	def operator(ops):
-		#unpack ops for clarity
-		procedure, arr = ops
-		for x in arr:
-			opPush(x)
-			interpretSPS(procedure)
+    def operator(ops):
+        #unpack ops for clarity
+        procedure, arr = ops
+        for x in arr:
+            opPush(x)
+            interpretSPS(procedure)
 
-	def typecheck(ops):
-		#unpack ops for clarity
-		arr, procedure = ops
-		tests = []
-		tests.append(isinstance(arr, list) and all(isinstance(x, int) for x
-			in arr))
-		tests.append(isinstance(procedure, list) and
-			not all(isinstance(x, int) for x in procedure))
-		return all(tests)
+    def typecheck(ops):
+        #unpack ops for clarity
+        arr, procedure = ops
+        tests = []
+        tests.append(isinstance(arr, list) and all(isinstance(x, int) for x
+            in arr))
+        tests.append(isinstance(procedure, list) and
+            not all(isinstance(x, int) for x in procedure))
+        return all(tests)
 
-	opBase(operator, typecheck)
-	#pop result of operator off stack since no result is desird
-	opPop()
-		
+    opBase(operator, typecheck)
+    #pop result of operator off stack since no result is desird
+    opPop()
+        
 
 #tokenizes an input string
 def tokenize(s):
@@ -380,7 +384,7 @@ def groupMatching3(it):
 #converts tokens to the correct python data type
 def convert(c):
     #integer
-    if c.isdigit():
+    if c.isdigit() or (c[0] == '-' and c[1:].isdigit):
         return int(c)
     #float
     if c.replace('.','',1).isdigit():
@@ -394,7 +398,7 @@ def convert(c):
     elif c[0] == '[':
         #return index 0 to remove outer list
         return groupMatching3(iter(tokenizeArray(c)))[0]
-    #string
+    #named constant
     else:
         return c
 
@@ -417,8 +421,8 @@ def interpretSPS(code):
     'lt':lt, 'gt':gt, 'eq':eq, 'neg':neg, 'put':put, 'length':length,
     'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
     'pop':pop, 'copy':copy, 'clear':clear, 'stack':stack, '=':popPrint,
-	'count':count, 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef,
-	'if':psIf, 'ifelse':psIfelse, 'for':psFor, 'forall':forAll}
+    'count':count, 'dict':psDict, 'begin':begin, 'end':end, 'def':psDef,
+    'if':psIf, 'ifelse':psIfelse, 'for':psFor, 'forall':forAll}
 
     #handle each value
     for value in code:
@@ -796,6 +800,251 @@ def testpsDef2():
     end()
     return True
 
+#------------------PART2 TEST CASES----------------------------
+def testpsIf():
+    global opstack
+    opstack = [True, [3, 1, 'add']]
+    psIf()
+    if opstack[0] == 4:
+        return True
+    return False
+
+def testpsIf2():
+    global opstack
+    opstack = [False, [3, 1, 'add']]
+    psIf()
+    if opstack == []:
+        return True
+    return False
+
+def testpsIfelse():
+    global opstack
+    opstack = [True, [3, 1, 'add'], [3, 1, 'mul']]
+    psIfelse()
+    if opstack[0] == 4:
+        return True
+    return False
+
+def testpsIfelse2():    
+    global opstack
+    opstack = [False, [3,1,'add'], [3,1,'mul']]
+    psIfelse()
+    if opstack[0] == 3:
+        return True
+    return False
+
+def testpsFor():
+    global opstack
+    opstack = [1,1,3,[10, 'mul']]
+    psFor()
+    if opstack == [10, 20, 30]:
+        return True
+    return False
+
+def testpsFor2():
+    global opstack
+    opstack = [1,1,5,['dup']]
+    psFor()
+    if opstack == [1,1,2,2,3,3,4,4,5,5]:
+        return True
+    return False
+
+def testforAll():
+    global opstack
+    opstack = [[1,2,3,4], [2, 'mul']]
+    forAll()
+    return opstack == [2,4,6,8]
+
+def testforAll2():
+    global opstack
+    opstack = [[1,2,3,4], [2, 'add']]
+    forAll()
+    return opstack == [3,4,5,6]
+
+#inputs for tokenize and parse testing
+input1 = """
+    /square {dup mul} def
+    [1 2 3 4] {square} forall
+    add add add 30 eq true
+    stack
+"""
+
+input2 = """
+    [1 2 3 4 5] dup length /n exch def
+    /fact {
+        0 dict begin
+            /n exch def
+            n 2 lt
+            { 1}
+            {n 1 sub fact n mul }
+            ifelse
+        end
+    } def
+    n fact stack
+"""
+
+input3 = """
+    [9 9 8 4 10] {dup 5 lt {pop} if} forall
+    stack
+"""
+
+input4 = """
+    [1 2 3 4 5] dup length exch {dup mul}    forall
+    add add add add
+    exch 0 exch -1 1 {dup mul add} for
+    eq stack
+"""
+
+input5 = """
+    /n 2 def
+    0 dict begin
+    /n 3 def
+    n end n add
+    stack
+"""
+
+input6 = """
+    2 3 add
+    4 sub
+    10 mul
+    2 div
+    3 mod
+    /square {dup mul} def
+    square
+    stack
+"""
+
+def testtokenize():
+    return tokenize(input1) == ['/square', '{', 'dup', 'mul', '}', 'def',
+        '[1 2 3 4]', '{', 'square', '}', 'forall', 'add', 'add', 'add', '30',
+        'eq', 'true', 'stack']
+
+def testtokenize2():
+    return tokenize(input2) == ['[1 2 3 4 5]', 'dup', 'length', '/n', 'exch',
+        'def', '/fact', '{', '0', 'dict', 'begin', '/n', 'exch', 'def', 'n',
+        '2', 'lt', '{', '1', '}', '{', 'n', '1', 'sub', 'fact', 'n', 'mul',
+        '}', 'ifelse', 'end', '}', 'def', 'n', 'fact', 'stack']
+
+def testtokenize3():
+    return tokenize(input3) == ['[9 9 8 4 10]', '{', 'dup', '5', 'lt', '{',
+        'pop', '}', 'if', '}', 'forall', 'stack']
+
+def testtokenize4():
+    return tokenize(input4) == ['[1 2 3 4 5]', 'dup', 'length', 'exch', '{',
+    'dup', 'mul', '}', 'forall', 'add', 'add', 'add', 'add', 'exch', '0',
+    'exch', '-1', '1', '{', 'dup', 'mul', 'add', '}', 'for', 'eq', 'stack']
+
+def testparse():
+    return parse(tokenize(input1)) == ['/square', ['dup', 'mul'], 'def', [1, 2,
+    3,4], ['square'], 'forall', 'add', 'add', 'add', 30, 'eq', True, 'stack']
+
+def testparse2():
+    return parse(tokenize(input2)) == [[1,2,3,4,5], 'dup', 'length', '/n',
+    'exch', 'def', '/fact', [0, 'dict', 'begin', '/n', 'exch', 'def', 'n', 2,
+    'lt', [1], ['n', 1, 'sub', 'fact', 'n', 'mul'], 'ifelse', 'end'], 'def',
+    'n', 'fact', 'stack']
+
+def testparse3():
+    return parse(tokenize(input3)) == [[9, 9, 8, 4,10], ['dup', 5, 'lt',
+    ['pop'], 'if'], 'forall', 'stack']
+
+def testparse4():
+    return parse(tokenize(input4)) == [[1,2,3,4,5], 'dup', 'length', 'exch',
+    ['dup', 'mul'], 'forall', 'add', 'add', 'add', 'add', 'exch', 0, 'exch',
+    -1, 1, ['dup', 'mul', 'add'], 'for', 'eq', 'stack']
+
+def testtokenizeArray():
+    return tokenizeArray('[1 2 3 4]') == ['[', '1', '2', '3', '4', ']']
+
+def testtokenizeArray2():
+    return tokenizeArray('[1 2 [3 4] 5]') == ['[', '1', '2', '[', '3', '4', ']',
+    '5', ']']
+
+def testconvert():
+    #integer
+    return convert('1') == 1
+
+def testconvert2():
+    #float
+    return convert('1.0') == 1.0
+
+def testconvert3():
+    #boolean
+    return convert('true') == True
+
+def testconvert4():
+    #boolean
+    return convert('false') == False
+
+def testconvert5():
+    #array
+    return convert('[1 2 3]') == [1,2,3]
+
+def testconvert6():
+    #named constant
+    return convert('/lol') == '/lol'
+
+def testinterpreter():
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    print('interpreter input1 test:')
+    interpreter(input1)
+    return opstack == [True, True] and dictstack == [{'/square': ['dup',
+        'mul']}] 
+
+def testinterpreter2():
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    print('interpreter input2 test:')
+    interpreter(input2)
+    return opstack == [[1,2,3,4,5], 120] and dictstack == [{'/square': ['dup',
+        'mul'], '/fact': [0, 'dict', 'begin', '/n', 'exch', 'def', 'n', 2, 'lt',
+        [1], ['n', 1, 'sub', 'fact', 'n', 'mul'], 'ifelse', 'end'], '/n': 5}]
+
+def testinterpreter3():
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    print(dictstack)
+    print('interpreter input3 test:')
+    interpreter(input3)
+    return opstack == [9,9,8,10] and dictstack == []
+
+def testinterpreter4():
+    global opstack
+    global dictstack
+    dictstack.clear()
+    opstack.clear()
+    print('interpreter input4 test:')
+    interpreter(input4)
+    return opstack == [True] and dictstack == []
+
+def testinterpreter5():
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    print('interpreter input5 test:')
+    interpreter('/n 2 def 0 dict begin /n 3 def n end n add stack')
+    return opstack == [5] and dictstack == [{'/square': ['dup', 'mul'],
+        '/fact': [0, 'dict', 'begin', '/n', 'exch', 'def', 'n', 2, 'lt', [1], ['n',
+        1, 'sub', 'fact', 'n', 'mul'], 'ifelse', 'end'], '/n': 2}]
+
+def testinterpreter6():
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    print('interpreter input6 test:')
+    interpreter(input6)
+    return opstack == [4.0] #and dictstack == [{'/square': ['dup', 'mul']}]
+
+#------------------RUN TESTS-----------------------------------
 
 def main_part1():
     testCases = [
@@ -844,10 +1093,64 @@ def main_part1():
     ]
     # add you test functions to this list along with suitable names
     failedTests = [testName for (testName, testProc) in testCases if not testProc()]
+    #clear stacks
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    
     if failedTests:
         return ('Some tests failed', failedTests)
     else:
         return ('All part-1 tests OK')
 
+def main_part2():
+    testCases = [
+        ('psIf', testpsIf),
+        ('psIf2', testpsIf2),
+        ('psIfelse', testpsIfelse),
+        ('psIfelse2', testpsIfelse2),
+        ('psFor', testpsFor),
+        ('psFor2', testpsFor2),
+        ('psforAll', testforAll),
+        ('psforAll2', testforAll2),
+        ('tokenize', testtokenize),
+        ('tokenize2', testtokenize2),
+        ('tokenize3', testtokenize3),
+        ('tokenize4', testtokenize4),
+        ('parse', testparse),
+        ('parse2', testparse2),
+        ('parse3', testparse3),
+        ('parse4', testparse4),
+        ('tokenizeArray', testtokenizeArray),
+        ('tokenizeArray2', testtokenizeArray2),
+        ('convert', testconvert),
+        ('convert2', testconvert2),
+        ('convert3', testconvert3),
+        ('convert4', testconvert4),
+        ('convert5', testconvert5),
+        ('convert6', testconvert6),
+        ('interpreter', testinterpreter),
+        ('interpreter2', testinterpreter2),
+        ('interpreter3', testinterpreter3),
+        ('interpreter4', testinterpreter4),
+        ('interpreter5', testinterpreter5),
+        ('interpreter6', testinterpreter6)
+    ]
+    # add you test functions to this list along with suitable names
+    failedTests = [testName for (testName, testProc) in testCases if not testProc()]
+
+    #clear stacks
+    global opstack
+    global dictstack
+    opstack.clear()
+    dictstack.clear()
+    
+    if failedTests:
+        return ('Some tests failed', failedTests)
+    else:
+        return ('All part-2 tests OK')
+
 if __name__ == '__main__':
     print(main_part1())
+    print(main_part2())
