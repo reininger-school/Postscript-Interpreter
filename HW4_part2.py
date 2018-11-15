@@ -1,7 +1,8 @@
 #programmer: Reid Reininger(charles.reininger@wsu.edu)
 #date: 11/7/18
 #desc: Intended for Unix/Linux Systems. Interpreter for Simplified
-#      Postscript(SPS).
+#      Postscript(SPS). Part2. Part2 code begins at line 272. Part2 test
+#      functions begin at line 821.
 
 #to check for iterable object types
 from collections.abc import Iterable
@@ -273,16 +274,20 @@ def psDef():
 
 #control operators
 def psIf():
+    """Pop a bool and code block from opstack, exe code if bool is true."""
     def operator(ops):
         if ops[1]:
             interpretSPS(ops[0])
     def typecheck(ops):
         return isinstance(ops[1], list) and not all(isinstance(x, int) for x in ops[1]) and isinstance(ops[0], bool)
+
     opBase(operator, typecheck)
     #pop result of operator off of stack since no result is desired
     opPop()
 
 def psIfelse():
+    """pop a bool and two codeblocks from opstack, exe first block if bool is
+    true, second block if false."""
     def operator(ops):
         if ops[2]:
             interpretSPS(ops[1])
@@ -291,11 +296,14 @@ def psIfelse():
 
     def typecheck(ops):
         return isinstance(ops[2], list) and isinstance(ops[1], list) and isinstance(ops[0], bool)
+
     opBase(operator, typecheck, 3)
     #pop result of operator off of stack since no result is desired
     opPop()
 
 def psFor():
+    """Pop <init><incr><final><codearray> off opstack, pushing the current
+    iteration value to opstack then executing the codearray for each loop."""
     def operator(ops):
         #unpack ops for clarity
         code_array, final, incr, init = ops
@@ -326,6 +334,8 @@ def psFor():
     opPop()
 
 def forAll():
+    """Pop array and codeblock from opstack, execute codeblock on each item in
+    array pushing each result to opstack."""
     def operator(ops):
         #unpack ops for clarity
         procedure, arr = ops
@@ -350,11 +360,13 @@ def forAll():
 
 #tokenizes an input string
 def tokenize(s):
+    """Break an input string into list of tokens."""
     return re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0\
         -9_\s!]*[]]|[-]?[0-9]+|[}{]+|%.*|[^ \t\n]", s)
 
 #matches code arrays
 def groupMatching2(it):
+    """Creates sublists of matching '{' characters."""
     res = []
     for c in it:
         if c == '}':
@@ -367,10 +379,12 @@ def groupMatching2(it):
 
 #tokenize an integer array
 def tokenizeArray(s):
+    """Break an array string into tokens."""
     return re.findall('\[|\]|\d[0-9.]*', s)
 
 #matches integer arrays
 def groupMatching3(it):
+    """Creates sublists of matching '[' characters."""
     res = []
     for c in it:
         if c == ']':
@@ -383,6 +397,7 @@ def groupMatching3(it):
 
 #converts tokens to the correct python data type
 def convert(c):
+    """Converts a string into the corresponding python data type."""
     #integer
     if c.isdigit() or (c[0] == '-' and c[1:].isdigit):
         return int(c)
@@ -404,6 +419,7 @@ def convert(c):
 
 #accepts list of tokens from tokenize, converting into correct python types
 def parse(tokens):
+    """Converts a list of input tokens into python data types for use."""
     res = []
     it = iter(tokens)
     for c in it:
@@ -417,6 +433,7 @@ def parse(tokens):
 
 #interprets code arrays
 def interpretSPS(code):
+    """Executes code arrays created with parse()."""
     operators = {'add':add, 'sub':sub, 'mul':mul, 'div':div, 'mod':mod,
     'lt':lt, 'gt':gt, 'eq':eq, 'neg':neg, 'put':put, 'length':length,
     'get':get, 'and':psAnd, 'or':psOr, 'not':psNot, 'dup':dup, 'exch':exch,
@@ -451,6 +468,7 @@ def interpretSPS(code):
             print('invalid input')
 
 def interpreter(s):
+    """Calls necessary functions to execute an SPS input string."""
     interpretSPS(parse(tokenize(s)))
 
 #-------------------------TEST FUNCTIONS--------------------------------
@@ -1010,7 +1028,6 @@ def testinterpreter3():
     global dictstack
     opstack.clear()
     dictstack.clear()
-    print(dictstack)
     print('interpreter input3 test:')
     interpreter(input3)
     return opstack == [9,9,8,10] and dictstack == []
